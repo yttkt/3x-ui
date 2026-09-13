@@ -9,6 +9,16 @@ export type transportBits = number;
 
 export interface AllSetting {
   datepicker: string;
+  discordAdminIds: string;
+  discordBotBackup: boolean;
+  discordBotEnable: boolean;
+  discordBotToken: string;
+  discordChannelId: string;
+  discordCpu: number;
+  discordEnabledEvents: string;
+  discordLang: string;
+  discordMemory: number;
+  discordRunTime: string;
   expireDiff: number;
   externalTrafficInformEnable: boolean;
   externalTrafficInformURI: string;
@@ -146,11 +156,22 @@ export interface AllSetting {
 
 export interface AllSettingView {
   datepicker: string;
+  discordAdminIds: string;
+  discordBotBackup: boolean;
+  discordBotEnable: boolean;
+  discordBotToken: string;
+  discordChannelId: string;
+  discordCpu: number;
+  discordEnabledEvents: string;
+  discordLang: string;
+  discordMemory: number;
+  discordRunTime: string;
   expireDiff: number;
   externalTrafficInformEnable: boolean;
   externalTrafficInformURI: string;
   happLinkEnable: boolean;
   hasApiToken: boolean;
+  hasDiscordBotToken: boolean;
   hasLdapPassword: boolean;
   hasNordSecret: boolean;
   hasSmtpPassword: boolean;

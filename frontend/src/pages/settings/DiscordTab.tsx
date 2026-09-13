@@ -5,32 +5,34 @@ import { BellOutlined, SendOutlined, SettingOutlined } from '@ant-design/icons';
 import { HttpUtil, LanguageManager } from '@/utils';
 import type { AllSetting } from '@/models/setting';
 import { SettingListItem } from '@/components/ui';
-import { TelegramNotifications } from '@/components/ui/notifications/TelegramNotifications';
+import { DiscordNotifications } from '@/components/ui/notifications/DiscordNotifications';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { catTabLabel } from './catTabLabel';
 import { NotifyTimeField } from './NotifyTimeField';
 import SecretInput from './SecretInput';
 
-interface TelegramTabProps {
+interface DiscordTabProps {
   allSetting: AllSetting;
   updateSetting: (patch: Partial<AllSetting>) => void;
 }
 
-export default function TelegramTab({ allSetting, updateSetting }: TelegramTabProps) {
+interface DiscordTestResult {
+  success: boolean;
+  msg: string;
+}
+
+export default function DiscordTab({ allSetting, updateSetting }: DiscordTabProps) {
   const { t } = useTranslation();
   const { isMobile } = useMediaQuery();
   const [testLoading, setTestLoading] = useState(false);
-  const [testResult, setTestResult] = useState<{ success: boolean; msg: string } | null>(null);
+  const [testResult, setTestResult] = useState<DiscordTestResult | null>(null);
 
-  async function handleTestTgBot() {
+  async function handleTestDiscord() {
     setTestLoading(true);
     setTestResult(null);
     try {
-      const res = (await HttpUtil.post('/panel/api/setting/testTgBot')) as {
-        success?: boolean;
-        msg?: string;
-      };
-      setTestResult({ success: !!res.success, msg: res.msg || '' });
+      const res = (await HttpUtil.post('/panel/api/setting/testDiscord')) as DiscordTestResult;
+      setTestResult(res);
     } catch (e: unknown) {
       setTestResult({
         success: false,
@@ -70,63 +72,66 @@ export default function TelegramTab({ allSetting, updateSetting }: TelegramTabPr
             <>
               <SettingListItem
                 paddings="small"
-                title={t('pages.settings.telegramBotEnable')}
-                description={t('pages.settings.telegramBotEnableDesc')}
+                title={t('pages.settings.discordBotEnable')}
+                description={t('pages.settings.discordBotEnableDesc')}
               >
                 <Switch
-                  checked={allSetting.tgBotEnable}
-                  onChange={(v) => updateSetting({ tgBotEnable: v })}
+                  checked={allSetting.discordBotEnable}
+                  onChange={(v) => updateSetting({ discordBotEnable: v })}
                 />
               </SettingListItem>
 
               <SettingListItem
                 paddings="small"
-                title={t('pages.settings.telegramToken')}
+                title={t('pages.settings.discordBotToken')}
                 description={
-                  allSetting.hasTgBotToken && !allSetting.clearTgBotToken
-                    ? t('pages.settings.telegramTokenConfigured')
-                    : t('pages.settings.telegramTokenDesc')
+                  allSetting.hasDiscordBotToken && !allSetting.clearDiscordBotToken
+                    ? t('pages.settings.discordTokenConfigured')
+                    : t('pages.settings.discordBotTokenDesc')
                 }
               >
                 <SecretInput
-                  value={allSetting.tgBotToken}
-                  configured={allSetting.hasTgBotToken}
-                  clearArmed={allSetting.clearTgBotToken}
-                  placeholder={t('pages.settings.telegramTokenPlaceholder')}
-                  onChange={(v) => updateSetting({ tgBotToken: v })}
-                  onClearArmedChange={(armed) => updateSetting({ clearTgBotToken: armed })}
+                  value={allSetting.discordBotToken}
+                  configured={allSetting.hasDiscordBotToken}
+                  clearArmed={allSetting.clearDiscordBotToken}
+                  placeholder={t('pages.settings.discordTokenPlaceholder')}
+                  onChange={(v) => updateSetting({ discordBotToken: v })}
+                  onClearArmedChange={(armed) => updateSetting({ clearDiscordBotToken: armed })}
                 />
               </SettingListItem>
 
               <SettingListItem
                 paddings="small"
-                title={t('pages.settings.telegramChatId')}
-                description={t('pages.settings.telegramChatIdDesc')}
+                title={t('pages.settings.discordChannelId')}
+                description={t('pages.settings.discordChannelIdDesc')}
               >
                 <Input
-                  value={allSetting.tgBotChatId}
-                  onChange={(e) => updateSetting({ tgBotChatId: e.target.value })}
+                  value={allSetting.discordChannelId}
+                  placeholder="e.g. 123456789012345678"
+                  onChange={(e) => updateSetting({ discordChannelId: e.target.value })}
+                  style={{ width: '100%' }}
                 />
               </SettingListItem>
 
-              <SettingListItem paddings="small" title={t('pages.settings.telegramBotLanguage')}>
+              <SettingListItem
+                paddings="small"
+                title={t('pages.settings.discordAdminIds')}
+                description={t('pages.settings.discordAdminIdsDesc')}
+              >
+                <Input
+                  value={allSetting.discordAdminIds}
+                  placeholder="e.g. 123456789012345678"
+                  onChange={(e) => updateSetting({ discordAdminIds: e.target.value })}
+                  style={{ width: '100%' }}
+                />
+              </SettingListItem>
+
+              <SettingListItem paddings="small" title={t('pages.settings.discordBotLanguage')}>
                 <Select
-                  value={allSetting.tgLang}
-                  onChange={(v) => updateSetting({ tgLang: v })}
+                  value={allSetting.discordLang}
+                  onChange={(v) => updateSetting({ discordLang: v })}
                   style={{ width: '100%' }}
                   options={langOptions}
-                />
-              </SettingListItem>
-
-              <SettingListItem
-                paddings="small"
-                title={t('pages.settings.telegramAPIServer')}
-                description={t('pages.settings.telegramAPIServerDesc')}
-              >
-                <Input
-                  value={allSetting.tgBotAPIServer}
-                  placeholder="https://api.example.com"
-                  onChange={(e) => updateSetting({ tgBotAPIServer: e.target.value })}
                 />
               </SettingListItem>
 
@@ -135,9 +140,10 @@ export default function TelegramTab({ allSetting, updateSetting }: TelegramTabPr
                   type="primary"
                   icon={<SendOutlined />}
                   loading={testLoading}
-                  onClick={handleTestTgBot}
+                  disabled={!allSetting.discordBotEnable}
+                  onClick={handleTestDiscord}
                 >
-                  {t('pages.settings.testTgBot')}
+                  {t('pages.settings.testDiscord')}
                 </Button>
                 {testResult && (
                   <Alert
@@ -158,31 +164,33 @@ export default function TelegramTab({ allSetting, updateSetting }: TelegramTabPr
             <>
               <SettingListItem
                 paddings="small"
-                title={t('pages.settings.telegramNotifyTime')}
-                description={t('pages.settings.telegramNotifyTimeDesc')}
+                title={t('pages.settings.discordNotifyTime')}
+                description={t('pages.settings.discordNotifyTimeDesc')}
               >
                 <NotifyTimeField
-                  value={allSetting.tgRunTime}
-                  onChange={(v) => updateSetting({ tgRunTime: v })}
-                />
-              </SettingListItem>
-              <SettingListItem
-                paddings="small"
-                title={t('pages.settings.tgNotifyBackup')}
-                description={t('pages.settings.tgNotifyBackupDesc')}
-              >
-                <Switch
-                  checked={allSetting.tgBotBackup}
-                  onChange={(v) => updateSetting({ tgBotBackup: v })}
+                  value={allSetting.discordRunTime}
+                  onChange={(v) => updateSetting({ discordRunTime: v })}
+                  ariaLabel={t('pages.settings.discordNotifyTime')}
                 />
               </SettingListItem>
 
               <SettingListItem
                 paddings="small"
-                title={t('pages.settings.tgEventBusNotify')}
-                description={t('pages.settings.tgEventBusNotifyDesc')}
+                title={t('pages.settings.discordNotifyBackup')}
+                description={t('pages.settings.discordNotifyBackupDesc')}
               >
-                <TelegramNotifications allSetting={allSetting} updateSetting={updateSetting} />
+                <Switch
+                  checked={allSetting.discordBotBackup}
+                  onChange={(v) => updateSetting({ discordBotBackup: v })}
+                />
+              </SettingListItem>
+
+              <SettingListItem
+                paddings="small"
+                title={t('pages.settings.discordEventBusNotify')}
+                description={t('pages.settings.discordEventBusNotifyDesc')}
+              >
+                <DiscordNotifications allSetting={allSetting} updateSetting={updateSetting} />
               </SettingListItem>
             </>
           ),

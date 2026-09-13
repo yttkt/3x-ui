@@ -5,6 +5,40 @@ export const SCHEMAS: Record<string, unknown> = {
       "datepicker": {
         "type": "string"
       },
+      "discordAdminIds": {
+        "type": "string"
+      },
+      "discordBotBackup": {
+        "type": "boolean"
+      },
+      "discordBotEnable": {
+        "type": "boolean"
+      },
+      "discordBotToken": {
+        "type": "string"
+      },
+      "discordChannelId": {
+        "type": "string"
+      },
+      "discordCpu": {
+        "maximum": 100,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "discordEnabledEvents": {
+        "type": "string"
+      },
+      "discordLang": {
+        "type": "string"
+      },
+      "discordMemory": {
+        "maximum": 100,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "discordRunTime": {
+        "type": "string"
+      },
       "expireDiff": {
         "minimum": 0,
         "type": "integer"
@@ -439,6 +473,16 @@ export const SCHEMAS: Record<string, unknown> = {
     },
     "required": [
       "datepicker",
+      "discordAdminIds",
+      "discordBotBackup",
+      "discordBotEnable",
+      "discordBotToken",
+      "discordChannelId",
+      "discordCpu",
+      "discordEnabledEvents",
+      "discordLang",
+      "discordMemory",
+      "discordRunTime",
       "expireDiff",
       "externalTrafficInformEnable",
       "externalTrafficInformURI",
@@ -580,6 +624,40 @@ export const SCHEMAS: Record<string, unknown> = {
       "datepicker": {
         "type": "string"
       },
+      "discordAdminIds": {
+        "type": "string"
+      },
+      "discordBotBackup": {
+        "type": "boolean"
+      },
+      "discordBotEnable": {
+        "type": "boolean"
+      },
+      "discordBotToken": {
+        "type": "string"
+      },
+      "discordChannelId": {
+        "type": "string"
+      },
+      "discordCpu": {
+        "maximum": 100,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "discordEnabledEvents": {
+        "type": "string"
+      },
+      "discordLang": {
+        "type": "string"
+      },
+      "discordMemory": {
+        "maximum": 100,
+        "minimum": 0,
+        "type": "integer"
+      },
+      "discordRunTime": {
+        "type": "string"
+      },
       "expireDiff": {
         "minimum": 0,
         "type": "integer"
@@ -594,6 +672,9 @@ export const SCHEMAS: Record<string, unknown> = {
         "type": "boolean"
       },
       "hasApiToken": {
+        "type": "boolean"
+      },
+      "hasDiscordBotToken": {
         "type": "boolean"
       },
       "hasLdapPassword": {
@@ -1035,11 +1116,22 @@ export const SCHEMAS: Record<string, unknown> = {
     },
     "required": [
       "datepicker",
+      "discordAdminIds",
+      "discordBotBackup",
+      "discordBotEnable",
+      "discordBotToken",
+      "discordChannelId",
+      "discordCpu",
+      "discordEnabledEvents",
+      "discordLang",
+      "discordMemory",
+      "discordRunTime",
       "expireDiff",
       "externalTrafficInformEnable",
       "externalTrafficInformURI",
       "happLinkEnable",
       "hasApiToken",
+      "hasDiscordBotToken",
       "hasLdapPassword",
       "hasNordSecret",
       "hasSmtpPassword",
